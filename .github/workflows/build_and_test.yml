@@ -56,12 +56,12 @@ jobs:
         run: chmod +x ./gradlew
       - name: Restore Cache
         uses: actions/cache@v2
-          with:
-            path: |
-              ~/.gradle/caches
-              ~/.gradle/wrapper
-            key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-            restore-keys: |
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
               ${{ runner.os }}-gradle-
       - name: Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -93,9 +93,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Change wrapper permissions
-          run: chmod +x ./gradlew
+        run: chmod +x ./gradlew
       - name: Assemble Debug
-          run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v2

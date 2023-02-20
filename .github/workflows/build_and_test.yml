@@ -58,9 +58,7 @@ jobs:
     needs: apk
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: 'read'
-      id-token: 'write'
+
     steps:
       - uses: actions/checkout@v1
 
@@ -75,8 +73,10 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: 'principalSet://iam.googleapis.com/projects/147543835481/locations/global/workloadIdentityPools/githubactions/*'
-          service_account: 'github-action@actions-378217.iam.gserviceaccount.com'
+          credentials_json: '${{ secrets.FIREBASE_JSON_KEYFILE }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
 
       - name: set Current project
         run: gcloud config set project 'action-e8475'

@@ -91,9 +91,10 @@ jobs:
           $GITHUB_WORKSPACE/gradlew clean -Dskip.tests :app:assembleAndroidTest :app:assembleDebug
           find $GITHUB_WORKSPACE -name "*.apk"
 
-      - name: Run firebase tests
-        run: |
-         gcloud firebase test android run --type instrumentation "$GITHUB_WORKSPACE/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" "$GITHUB_WORKSPACE/app/src/androidTest" "ConnectedTestsSmpAnTester"
 
       - name: Run Instrumentation Tests in Firebase Test Lab
         run: gcloud firebase test android run --type instrumentation --app app-debug/app-debug.apk --test app-debug-androidTest/app-debug-androidTest.apk --device model=Pixel5,version=28,locale=pl,orientation=portrait
+
+      - name: Run firebase tests
+        run: |
+          gcloud firebase test android run --type instrumentation "$GITHUB_WORKSPACE/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" "$GITHUB_WORKSPACE/app/src/androidTest" "ConnectedTestsSmpAnTester"

@@ -1,106 +1,85 @@
-name: Build and Test
+name: Android Release
 
 on:
-  push:
-    branches:
-      - master
-    tags:
-      - 'v*'
-  workflow_dispatch:
-  schedule:
-    - cron: '0 1 * * *'
+  push
+
 
 jobs:
-  local_test_job:
-    name: Running Local Tests
-    runs-on: Ubuntu-latest
-    continue-on-error: true
+
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up JDK 11
+      - uses: actions/checkout@v1
+      - name: Set up JDK 11.0
         uses: actions/setup-java@v1
         with:
-          java-version: 11
-      - name: Print Java version
-        run: javac -version
-      - name: Change wrapper permissions
-        run: chmod +x ./gradlew
-      - name: Restore Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          java-version: 11.0
 
-      - name: Run Debug Tests
-        run: ./gradlew testDebugUnitTest --continue
-      - name: Upload Test Reports
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-reports
-          path: '**/build/reports/tests/'
+      - name: Run Unit Tests
+        run: bash ./gradlew test --stacktrace
 
-  android_test_job:
-    name: Android Test
-    runs-on: macos-latest
-    continue-on-error: true
+  apk:
+    name: Generate APK
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Change wrapper permissions
-        run: chmod +x ./gradlew
-      - name: Restore Cache
-        uses: actions/cache@v2
+      - uses: actions/checkout@v1
+      - name: Set up JDK 11.0
+        uses: actions/setup-java@v1
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-              ${{ runner.os }}-gradle-
-      - name: Instrumentation Tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          script: ./gradlew connectedAndroidTest
+          java-version: 11.0
 
-      - name: Upload Android Test Reports
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: android-test-reports
-          path: '**/build/reports/androidTests/'
-
-  build_job:
-    name: Building the APK
-    runs-on: Ubuntu-latest
-    continue-on-error: true
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Restore Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Change wrapper permissions
-        run: chmod +x ./gradlew
-      - name: Assemble Debug
-        run: ./gradlew assembleDebug
+      - name: Assemble debug APP APK
+        run: bash ./gradlew assembleDebug --stacktrace
+        env:
+          ZTM_API_KEY: ${{ secrets.ZTM_API_KEY }}
 
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v1
         with:
-          name: apk
-          path: app/build/outputs/apk/debug/**.apk
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
 
+      - name: Android UI Tests
+        run: bash ./gradlew assembleDebugAndroidTest
+        env:
+          ZTM_API_KEY: ${{ secrets.ZTM_API_KEY }}
 
+      - name: Upload Android Test APK
+        uses: actions/upload-artifact@v1
+        with:
+          name: app-debug-androidTest
+          path: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+
+  firebase:
+    name: Run ui tests with firebase test lab
+    needs: apk
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Download apk
+        uses: actions/download-artifact@v1
+        with:
+          name: app-debug-androidTest
+
+      - uses: 'actions/checkout@v3'
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: 'principalSet://iam.googleapis.com/projects/147543835481/locations/global/workloadIdentityPools/githubactions/*'
+          service_account: 'github-action@actions-378217.iam.gserviceaccount.com'
+
+      - name: set Current project
+        run: gcloud config set project 'action-e8475'
+
+      - name: Run Instrumentation Tests in Firebase Test Lab
+        run: gcloud firebase test android run --type instrumentation --app app-debug/app-debug.apk --test app-debug-androidTest/app-debug-androidTest.apk --device model=Pixel5,version=28,locale=pl,orientation=portrait

@@ -86,10 +86,7 @@ jobs:
 
   
 
-      - name: Setup Google Cloud
-        run: gcloud auth activate-service-account firebase-adminsdk-bebis@action-e8475.iam.gserviceaccount.com --key-file= '${{ secrets.FIREBASE_JSON_KEYFILE }}' --project=action-e8475
-
-      - name: Run Instrumentation Tests in Firebase Test Lab
+       - name: Run Instrumentation Tests in Firebase Test Lab
         run: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/app-debug/app-debug.apk --test app/build/outputs/apk/app-debug-androidTest/app-debug-androidTest.apk --device model=Pixel5,version=28,locale=pl,orientation=portrait
 
       - name: Run firebase tests

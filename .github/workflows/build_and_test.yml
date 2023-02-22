@@ -78,16 +78,9 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
 
-      - name: set Current project
-        run: gcloud config set project 'action-e8475'
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          cache-read-only: false
-
       - name: Build apks for testing on firebase
         run: |
+          gcloud config set project 'action-e8475'
           $GITHUB_WORKSPACE/gradlew clean -Dskip.tests :app:assembleAndroidTest :app:assembleDebug
           find $GITHUB_WORKSPACE -name "*.apk"
 

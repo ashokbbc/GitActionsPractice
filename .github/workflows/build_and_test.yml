@@ -72,18 +72,14 @@ jobs:
 
       - uses: 'actions/checkout@v3'
 
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          workload_identity_provider: 'projects/818217442592/locations/global/workloadIdentityPools/action/providers/github'
-          service_account: 'actionstab@action-e8475.iam.gserviceaccount.com'
+      - name: Setup Firebase credentials
+        run: scripts/decrypt_firebase_secret.sh
+        env:
+          FIREGCP: ${{ secrets.FIREGCP }}
 
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v1'
+      - name: Setup Google Cloud
+        run: gcloud auth activate-service-account firebase-adminsdk-i064k@action-e8475.iam.gserviceaccount.com --key-file=firebase-api-key.json --project=action-e8475
 
-      - name: 'Use gcloud CLI'
-        run: 'gcloud info'
 
       - name: Build apks for testing on firebase
         run: |

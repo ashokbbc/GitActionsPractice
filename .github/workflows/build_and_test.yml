@@ -66,7 +66,7 @@ jobs:
 
       - name: create apk
         run: |
-          $GITHUB_WORKSPACE/gradlew clean -Dskip.tests  assembleDebugAndroidTest assembleDebug --stacktrace
+          ./gradlew  assembleDebugAndroidTest assembleDebug --stacktrace
           find $GITHUB_WORKSPACE -name "*.apk"
 
       - uses: 'actions/checkout@v3'

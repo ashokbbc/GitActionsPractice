@@ -73,7 +73,8 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
-          credentials_json: ${{secrets.FIREGCP}}
+          workload_identity_provider: 'projects/818217442592/locations/global/workloadIdentityPools/action/providers/github'
+          service_account: 'actionstab@action-e8475.iam.gserviceaccount.com'
 
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'

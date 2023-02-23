@@ -83,8 +83,7 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v1'
 
       - name: 'Use gcloud CLI'
-        run: |
-        'gcloud info'
+        run: 'gcloud info'
 
       - name: Build apks for testing on firebase
         run: |

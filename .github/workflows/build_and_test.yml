@@ -55,7 +55,6 @@ jobs:
 
   DEV:
     name: Run ui tests with firebase test lab
-    needs: apk
     runs-on: ubuntu-latest
 
     permissions:
@@ -65,10 +64,10 @@ jobs:
 
     steps:
 
-      - name: Download apk
-        uses: actions/download-artifact@v1
-        with:
-          name: app-debug-androidTest
+      - name: create apk
+        run: |
+          $GITHUB_WORKSPACE/gradlew clean -Dskip.tests  app:assembleDebugAndroidTest app:assembleDebug
+          find $GITHUB_WORKSPACE -name "*.apk"
 
       - uses: 'actions/checkout@v3'
 

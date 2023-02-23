@@ -83,10 +83,13 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v1'
 
       - name: 'Use gcloud CLI'
-        run: 'gcloud info'
+        run: |
+        'gcloud info'
+        gcloud auth login
 
       - name: Build apks for testing on firebase
         run: |
+          gcloud config set account actionstab@action-e8475.iam.gserviceaccount.com
           gcloud config set project 'action-e8475'
           $GITHUB_WORKSPACE/gradlew clean -Dskip.tests :app:assembleAndroidTest :app:assembleDebug
           find $GITHUB_WORKSPACE -name "*.apk"

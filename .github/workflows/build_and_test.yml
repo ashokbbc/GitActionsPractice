@@ -73,16 +73,16 @@ jobs:
       - uses: 'actions/checkout@v3'
 
 
-      - name: Setup Google Cloud
-        run: gcloud auth activate-service-account firebase-adminsdk-i064k@action-e8475.iam.gserviceaccount.com --key-file=scripts/firebase-api-key.json --project=action-e8475
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.FIREBASE_JSON_KEYFILE }}'
 
 
-      - name: Build apks for testing on firebase
-        run: |
-          gcloud config set account actionstab@action-e8475.iam.gserviceaccount.com
-          gcloud config set project 'action-e8475'
-          $GITHUB_WORKSPACE/gradlew clean -Dskip.tests :app:assembleAndroidTest :app:assembleDebug
-          find $GITHUB_WORKSPACE -name "*.apk"
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+
 
   
 

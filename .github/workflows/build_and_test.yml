@@ -85,7 +85,6 @@ jobs:
       - name: 'Use gcloud CLI'
         run: |
         'gcloud info'
-        gcloud auth login
 
       - name: Build apks for testing on firebase
         run: |

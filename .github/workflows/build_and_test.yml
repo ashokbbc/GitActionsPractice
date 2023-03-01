@@ -6,6 +6,7 @@ on:
 env:
   GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
   GIT_NUM: ${{ github.event.pull_request.head.sha }}
+  GIT_NO: ${{ github.run_number }}
 
 jobs:
 
@@ -14,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "$GITHUB_PR_NUMBER" "$GIT_NUM"
+          echo "$GITHUB_PR_NUMBER" "$GIT_NUM" "$GIT_NO"
 
   test:
     name: Unit Tests

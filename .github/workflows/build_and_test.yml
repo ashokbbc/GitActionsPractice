@@ -1,10 +1,19 @@
 name: Android Release
 
 on:
-  push
+  pull_request
+  
+env:
+  GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
 
 jobs:
 
+  prJob:    
+    name: Print event
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "$GITHUB_PR_NUMBER"
   test:
     name: Unit Tests
     runs-on: ubuntu-latest

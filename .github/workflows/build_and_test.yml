@@ -1,6 +1,7 @@
 name: Android Release
 
 on:
+  push
   pull_request
   
 env:
@@ -14,6 +15,7 @@ jobs:
     steps:
       - run: |
           echo "$GITHUB_PR_NUMBER"
+
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
@@ -24,7 +26,21 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11.0
-          
+
+      - name: Get Branch
+        id: branch
+        run: echo "git_branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_BRANCH
+
+      - name: Check Branch
+        run: echo "${{ env.branch }}"
+
+      - name: Get Hash
+        id: hash
+        run: echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_HASH
+
+      - name: Check Hash
+        run: echo "${{ env.hash }}"
+
       - name: Get Pull Request Number
         id: pr
         run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"

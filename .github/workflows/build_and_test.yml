@@ -1,7 +1,6 @@
 name: Android Release
 
 on:
-  push
   pull_request
   
 env:

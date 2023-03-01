@@ -16,8 +16,13 @@ jobs:
         with:
           java-version: 11.0
 
+      - name: pr number
+        run: 'yarn deploy --stage $(git rev-parse --abbrev-ref "${{ github.event.push.ref }}")'
       - name: Run Unit Tests
         run: bash ./gradlew test --stacktrace
+        
+      - name: num
+        run: echo '${{steps.get_issue_number.outputs.result}}'
 
   apk:
     name: Generate APK

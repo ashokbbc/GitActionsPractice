@@ -16,6 +16,7 @@ jobs:
     steps:
       - run: |
           echo "$GITHUB_PR_NUMBER" "$GIT_NUM" "$GIT_NO"
+          "$GIT_NO"
 
   test:
     name: Unit Tests

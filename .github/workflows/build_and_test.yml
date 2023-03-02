@@ -18,8 +18,14 @@ jobs:
           echo "$GITHUB_PR_NUMBER" "$GIT_NUM" "$GIT_NO"
         
       - name: check
-        with:
+        run: echo "$GIT_NO"
+        env:
           AP_NO: "$GIT_NO"
+          
+      - name: checj
+        id: tes
+        with:
+          AO_JO: "$GIT_NO"
 
   test:
     name: Unit Tests

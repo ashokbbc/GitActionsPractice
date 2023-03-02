@@ -19,7 +19,7 @@ jobs:
           echo "$GITHUB_PR_NUMBER" "$GIT_NUM" "$GIT_NO"
         
       - name: check
-        run: echo "$GIT_NO"
+        run: pr_numbers:${{ env.GITHUB_PR_NUMBER }}
         env:
           AP_NO: "$GIT_NO"
         

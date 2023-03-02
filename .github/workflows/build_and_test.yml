@@ -1,9 +1,32 @@
 name: Android Release
 
 on:
-  push
+  pull_request
+  
+env:
+  GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
+  GIT_NUM: ${{ github.event.pull_request.head.sha }}
+  GIT_NO: ${{ github.run_number }}
+  resourceGroup2: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
+
+  prJob:    
+    name: Print event
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "$GITHUB_PR_NUMBER" "$GIT_NUM" "$GIT_NO"
+        
+      - name: check
+        run: pr_numbers:${{ env.GITHUB_PR_NUMBER }}
+        env:
+          AP_NO: "$GIT_NO"
+        
+      - name: test2
+        run: echo ${{ env.resourceGroup2 }}
+          
+    
 
   test:
     name: Unit Tests
@@ -16,8 +39,31 @@ jobs:
         with:
           java-version: 11.0
 
+      - name: Get Branch
+        id: branch
+        run: echo "git_branch=${GITHUB_REF#refs/heads/}"
+
+      - name: Check Branch
+        run: echo "${{ env.branch }}"
+
+      - name: Get Hash
+        id: hash
+        run: echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")"
+
+      - name: Check Hash
+        run: echo "${{ env.hash }}"
+
+      - name: Get Pull Request Number
+        id: pr
+        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+
+      - name: pr number
+        run: echo '${{steps.get_issue_number.outputs.result}}'
       - name: Run Unit Tests
         run: bash ./gradlew test --stacktrace
+  
 
   apk:
     name: Generate APK
@@ -66,6 +112,7 @@ jobs:
   DEV:
     name: Run ui tests with firebase test lab
     runs-on: ubuntu-latest
+
 
     permissions:
       contents: 'read'

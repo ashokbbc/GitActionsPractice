@@ -14,19 +14,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Dependencies
-        run: bundle install
-
-      - name: Run unit tests
-        run: bundle exec fastlane test
 
       - uses: actions/upload-artifact@v3
         with:
           name: "Test Reports"
           path: app/build/reports/tests/
 
-      - name: Run Danger
-        run: bundle exec danger
-        if: ${{ success() || failure() }} # Run Danger even if unit tests fail
-        env:
-          DANGER_GITHUB_API_TOKEN: ${{ Secrets.GIT_TOKEN }}

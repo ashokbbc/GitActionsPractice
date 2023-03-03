@@ -28,7 +28,7 @@ jobs:
           echo "$GITHUB_PR_NUMBER.$GIT_NO" > ssr
         
       - name: Assemble apk
-          run: ./gradlew assembleRelease Version=$ACT
+        run: ./gradlew assembleRelease Version=$ACT
         
       - name: test2
         run: echo ${{ env.resourceGroup2 }}

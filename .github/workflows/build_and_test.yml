@@ -9,6 +9,7 @@ env:
   GIT_NUM: ${{ github.event.pull_request.head.sha }}
   GIT_NO: ${{ github.run_number }}
   resourceGroup2: ${{ github.run_id }}-${{ github.run_number }}
+  act: ${{github.event.pull_request.number}}.${{ github.run_number }}
 
 jobs:
 
@@ -26,11 +27,13 @@ jobs:
       - run: |
           echo "$GITHUB_PR_NUMBER.$GIT_NO" > ssr
         
-      - name: Assemble apk
-        run: ./gradlew assembleRelease Version=$ACT
+#      - name: Assemble apk
+#        run: ./gradlew assembleRelease Version=$ACT
         
       - name: test2
-        run: echo ${{ env.resourceGroup2 }}
+        run: |
+        echo ${{ env.resourceGroup2 }}
+        echo "GITACT: $GITHUB_RUN_NUMBER"
 
 
   test:

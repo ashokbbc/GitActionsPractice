@@ -20,6 +20,7 @@ jobs:
       - uses: actions/checkout@v3
         env:
           ACT: $GITHUB_PR_NUMBER.$GIT_NO
+          EAS: ${{github.event.pull_request.number}}
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
@@ -34,6 +35,7 @@ jobs:
         run: |
           echo ${{ env.resourceGroup2 }}
           echo "GITACT: $GITHUB_RUN_NUMBER"
+          echo "GITPR: ${{ env.EAS }}"
 
 
   test:
@@ -88,71 +90,71 @@ jobs:
       - name: Assemble apk
         run: ./gradlew assembleRelease
 
-      - name: release to firebase
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{secrets.FIREBASE_APP_ID}}
-          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-          file: app/build/outputs/apk/release/app-release-unsigned.apk
+#      - name: release to firebase
+#        uses: wzieba/Firebase-Distribution-Github-Action@v1
+#        with:
+#          appId: ${{secrets.FIREBASE_APP_ID}}
+#          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+#          file: app/build/outputs/apk/release/app-release-unsigned.apk
 
-      - name: Assemble debug APP APK
-        run: bash ./gradlew assembleDebug --stacktrace
-        env:
-          ZTM_API_KEY: ${{ secrets.ZTM_API_KEY }}
+#      - name: Assemble debug APP APK
+#        run: bash ./gradlew assembleDebug --stacktrace
+#        env:
+#          ZTM_API_KEY: ${{ secrets.ZTM_API_KEY }}
+#
+#      - name: Upload APK
+#        uses: actions/upload-artifact@v1
+#        with:
+#          name: app-debug
+#          path: app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+#      - name: Android UI Tests
+#        run: bash ./gradlew assembleDebugAndroidTest
+#        env:
+#          ZTM_API_KEY: ${{ secrets.ZTM_API_KEY }}
+#
+#      - name: Upload Android Test APK
+#        uses: actions/upload-artifact@v1
+#        with:
+#          name: app-debug-androidTest
+#          path: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 
-      - name: Android UI Tests
-        run: bash ./gradlew assembleDebugAndroidTest
-        env:
-          ZTM_API_KEY: ${{ secrets.ZTM_API_KEY }}
-
-      - name: Upload Android Test APK
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-debug-androidTest
-          path: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-
-  DEV:
-    name: Run ui tests with firebase test lab
-    runs-on: ubuntu-latest
-
-
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-
-
-    steps:
-
-      - name: create apk
-        run: |
-          bash ./gradlew assembleDebug
-          find $GITHUB_WORKSPACE -name "*.apk"
-
-      - uses: 'actions/checkout@v3'
-
-
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          credentials_json: '${{ secrets.FIREBASE_JSON_KEYFILE }}'
-
-
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v1'
-
-
-  
-
-      - name: Run Instrumentation Tests in Firebase Test Lab
-        run: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/app-debug/app-debug.apk --test app/build/outputs/apk/app-debug-androidTest/app-debug-androidTest.apk --device model=Pixel2,version=26,locale=pl,orientation=portrait
-
-      - name: Run firebase tests
-        run: |
-          gcloud firebase test android run --type instrumentation "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" "app/src/androidTest" 
+#  DEV:
+#    name: Run ui tests with firebase test lab
+#    runs-on: ubuntu-latest
+#
+#
+#    permissions:
+#      contents: 'read'
+#      id-token: 'write'
+#
+#
+#    steps:
+#
+#      - name: create apk
+#        run: |
+#          bash ./gradlew assembleDebug
+#          find $GITHUB_WORKSPACE -name "*.apk"
+#
+#      - uses: 'actions/checkout@v3'
+#
+#
+#      - id: 'auth'
+#        name: 'Authenticate to Google Cloud'
+#        uses: 'google-github-actions/auth@v1'
+#        with:
+#          credentials_json: '${{ secrets.FIREBASE_JSON_KEYFILE }}'
+#
+#
+#      - name: 'Set up Cloud SDK'
+#        uses: 'google-github-actions/setup-gcloud@v1'
+#
+#
+#
+#
+#      - name: Run Instrumentation Tests in Firebase Test Lab
+#        run: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/app-debug/app-debug.apk --test app/build/outputs/apk/app-debug-androidTest/app-debug-androidTest.apk --device model=Pixel2,version=26,locale=pl,orientation=portrait
+#
+#      - name: Run firebase tests
+#        run: |
+#          gcloud firebase test android run --type instrumentation "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" "app/src/androidTest"

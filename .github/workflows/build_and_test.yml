@@ -37,7 +37,7 @@ jobs:
           echo "GITACT: $GITHUB_RUN_NUMBER"
           echo "GITPR: ${{ env.EAS }}"
           echo "PRS: ${{github.event.pull_request.number}}"
-          echo "NOS: ${{ env.GITHUB_PR_NUMBER }}
+          echo "NOS: ${{ env.GITHUB_PR_NUMBER }}"
 
 
   test:

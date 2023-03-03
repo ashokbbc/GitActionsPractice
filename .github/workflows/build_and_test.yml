@@ -32,8 +32,8 @@ jobs:
         
       - name: test2
         run: |
-        echo ${{ env.resourceGroup2 }}
-        echo "GITACT: $GITHUB_RUN_NUMBER"
+          echo ${{ env.resourceGroup2 }}
+          echo "GITACT: $GITHUB_RUN_NUMBER"
 
 
   test:

@@ -31,7 +31,7 @@ jobs:
         
       - name: test2
         run: |
-          echo "exams: ${{ github.run_number }}" >> $GITHUB_ENV
+          echo "exams= ${{ github.run_number }}" >> $GITHUB_ENV
 
       - name: tests5
         run: bash ./gradlew test pro:${{ env.exams }}

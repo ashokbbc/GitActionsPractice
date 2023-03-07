@@ -25,17 +25,16 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - run: |
-          echo "$GITHUB_PR_NUMBER.$GIT_NO" > ssr
         
 #      - name: Assemble apk
 #        run: ./gradlew assembleRelease Version=$ACT
         
       - name: test2
         run: |
-          echo ${{ env.resourceGroup2 }}
-          echo "GITACT: $GITHUB_RUN_NUMBER"
-          echo "GITPR: ${{ env.EAS }}"
+          echo "exams= ${{ github.run_number }}" >> $GITHUB_ENV
+
+      - name: tests5
+        run: bash ./gradlew test pro:${{ env.exams }}
 
 
   test:

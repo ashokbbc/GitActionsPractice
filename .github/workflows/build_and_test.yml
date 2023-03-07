@@ -33,11 +33,10 @@ jobs:
         
       - name: test2
         run: |
-          echo ${{ env.resourceGroup2 }}
-          echo "GITACT: $GITHUB_RUN_NUMBER"
-          echo "GITPR: ${{ env.EAS }}"
-          echo "PRS: ${{github.event.pull_request.number}}"
-          echo "NOS: ${{ env.GITHUB_PR_NUMBER }}"
+          echo "exams: ${{github.event.pull_request.number}}" >> $GITHUB_ENV
+
+      - name: tests5
+        run: bash ./gradlew test pro:${{ env.exams }}
 
 
   test:

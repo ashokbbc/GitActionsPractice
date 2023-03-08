@@ -55,6 +55,12 @@ jobs:
 
       - name: Check Branch
         run: echo "${{ env.branch }}"
+        
+      - name: appcenter-cli
+        run: npm install -g appcenter-cli
+
+      - name: get version
+        run: appcenter -v
 
       - name: Get Hash
         id: hash

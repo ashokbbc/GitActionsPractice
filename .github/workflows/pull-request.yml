@@ -1,7 +1,7 @@
 name: Pull Request
 
 on:
-  pull_request:
+  push:
 
 
 jobs:
@@ -19,7 +19,6 @@ jobs:
 
       - name: Set env
         run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
-
 
       - uses: actions/upload-artifact@v3
         with:

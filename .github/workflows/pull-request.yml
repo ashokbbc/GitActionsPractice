@@ -17,6 +17,9 @@ jobs:
 
       - run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
 
+      - name: Set env
+        run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
+
 
       - uses: actions/upload-artifact@v3
         with:

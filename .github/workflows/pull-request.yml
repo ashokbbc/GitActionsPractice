@@ -17,6 +17,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
         
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 1.0.0
+        
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}

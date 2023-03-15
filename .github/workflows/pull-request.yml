@@ -3,6 +3,8 @@ name: Pull Request
 on:
   push:
 
+env:
+  INCREMENT: 1
 
 jobs:
   Verify-Pull-Request:
@@ -32,7 +34,10 @@ jobs:
           test -n "${{ steps.previoustag.outputs.timestamp }}"
 
       - name: Test
-        run: echo $GIT_TAG_NO
+        run: |
+          (( RESULT = $GIT_TAG_NO + $INCREMENT ))
+          echo $RESULT
+          echo $GIT_TAG_NO
         
       - name: Get the version
         id: get_version

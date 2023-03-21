@@ -5,6 +5,7 @@ on:
 
 env:
   INCREMENT: 1
+  MAX: 3
 
 jobs:
   Verify-Pull-Request:
@@ -18,14 +19,20 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+        
+      - name: merge
+        run: |
+          echo "GIT_MERGE=$(($INCREASE$MAX))" >> $GITHUB_ENV
+          
+      - run: echo $GIT_MERGE
 
-      - name: release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-        with:
-          tag_name: ${{ github.run_number }}
-          release_name: ${{ github.run_number }}
+#       - name: release
+#         uses: actions/create-release@v1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+#         with:
+#           tag_name: ${{ github.run_number }}
+#           release_name: ${{ github.run_number }}
 
 #      - name: Release to github
 #        run: sh $GITHUB_WORKSPACE/release-to-github.sh

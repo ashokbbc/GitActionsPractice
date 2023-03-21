@@ -4,8 +4,8 @@ on:
   push:
 
 env:
-  INCREMENT: 1
-  MAX: 3
+  INCREMENT: 1a
+  MAXS: 3
 
 jobs:
   Verify-Pull-Request:
@@ -22,7 +22,7 @@ jobs:
         
       - name: merge
         run: |
-          echo "GIT_MERGE=$(($INCREASE$MAX))" >> $GITHUB_ENV
+          echo "GIT_MERGE=$(($INCREASE.$MAXS))" >> $GITHUB_ENV
           
       - run: echo $GIT_MERGE
 

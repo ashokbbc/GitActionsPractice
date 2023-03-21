@@ -22,7 +22,7 @@ jobs:
         
       - name: merge
         run: |
-          echo "GIT_MERGE=$(INCREMENTSA)$(MAXS)" >> $GITHUB_ENV
+          echo "GIT_MERGE=`echo $INCREMENTSA $MAXS`" >> $GITHUB_ENV
           
       - run: echo $GIT_MERGE
 

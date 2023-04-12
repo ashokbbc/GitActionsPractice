@@ -19,17 +19,24 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+
+      - name: Read package.json
+        id: package
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: $GITHUB_WORKSPACE/app/version.txt
+      - name: Echo package.json
+        run: echo "${{ steps.package.outputs.content }}"
         
-      - name: "Get latest tag"
-        id: latest_tag
-        run: echo "name=$(git tag --sort=-creatordate | head -1)"
-      - name: "Get second latest tag"
-        id: second_latest_tag
-        run: echo "name=$(git tag --sort=-creatordate | head -2 | tail -1)"
-        
-      - name: merge
-        run: |
-          echo "GIT_MERGE=`echo $INCREMENTSA$MAXS`" >> $GITHUB_ENV
+#      - name: "Get latest tag"
+#        id: latest_tag
+#        run: echo "name=$(git tag --sort=-creatordate | head -1)"
+#      - name: "Get second latest tag"
+#        id: second_latest_tag
+#        run: echo "name=$(git tag --sort=-creatordate | head -2 | tail -1)"
+#
+
+
           
       - run: echo $GIT_MERGE
 

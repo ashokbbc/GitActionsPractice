@@ -24,7 +24,7 @@ jobs:
         id: package
         uses: juliangruber/read-file-action@v1
         with:
-          path: $GITHUB_WORKSPACE/app/version.txt
+          path: ./app/version.txt
       - name: Echo package.json
         run: echo "${{ steps.package.outputs.content }}"
         

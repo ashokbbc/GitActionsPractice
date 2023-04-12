@@ -1,168 +1,168 @@
-name: Android Release
-
-on:
-  pull_request:
-  push:
-  
-env:
-  GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
-  GIT_NUM: ${{ github.event.pull_request.head.sha }}
-  GIT_NO: ${{ github.run_number }}
-  resourceGroup2: ${{ github.run_id }}-${{ github.run_number }}
-  act: ${{github.event.pull_request.number}}.${{ github.run_number }}
-
-jobs:
-
-  prJob:    
-    name: Print event
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        env:
-          ACT: $GITHUB_PR_NUMBER.$GIT_NO
-          EAS: ${{github.event.pull_request.number}}
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      - run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
-
-      - run: |
-          echo "$GITHUB_PR_NUMBER.$GIT_NO" > ssr
-        
-#      - name: Assemble apk
-#        run: ./gradlew assembleRelease Version=$ACT
-        
-      - name: test2
-        run: |
-          echo ${{ env.resourceGroup2 }}
-          echo "GITACT: $GITHUB_RUN_NUMBER"
-          echo "GITPR: ${{ env.EAS }}"
-
-
-  test:
-    name: Unit Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v1
-      - name: Set up JDK 11.0
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11.0
-
-      - name: Get Branch
-        id: branch
-        run: echo "git_branch=${GITHUB_REF#refs/heads/}"
-
-      - name: Check Branch
-        run: echo "${{ env.branch }}"
-        
-      - name: appcenter-cli
-        run: npm install -g appcenter-cli
-
-      - name: get version
-        run: appcenter -v
-
-      - name: Get Hash
-        id: hash
-        run: echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")"
-
-      - name: Check Hash
-        run: echo "${{ env.hash }}"
-
-      - name: Get Pull Request Number
-        id: pr
-        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-
-      - name: pr number
-        run: echo '${{steps.get_issue_number.outputs.result}}'
-      - name: Run Unit Tests
-        run: bash ./gradlew test --stacktrace
-  
-
-  apk:
-    name: Generate APK
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v1
-      - name: Set up JDK 11.0
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11.0
-
-      - name: Assemble apk
-        run: ./gradlew assembleRelease
-
-#      - name: release to firebase
-#        uses: wzieba/Firebase-Distribution-Github-Action@v1
-#        with:
-#          appId: ${{secrets.FIREBASE_APP_ID}}
-#          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-#          file: app/build/outputs/apk/release/app-release-unsigned.apk
-
-#      - name: Assemble debug APP APK
-#        run: bash ./gradlew assembleDebug --stacktrace
-#        env:
-#          ZTM_API_KEY: ${{ secrets.ZTM_API_KEY }}
+#name: Android Release
 #
-#      - name: Upload APK
-#        uses: actions/upload-artifact@v1
-#        with:
-#          name: app-debug
-#          path: app/build/outputs/apk/debug/app-debug.apk
-
-#      - name: Android UI Tests
-#        run: bash ./gradlew assembleDebugAndroidTest
-#        env:
-#          ZTM_API_KEY: ${{ secrets.ZTM_API_KEY }}
+#on:
+#  pull_request:
+#  push:
 #
-#      - name: Upload Android Test APK
-#        uses: actions/upload-artifact@v1
-#        with:
-#          name: app-debug-androidTest
-#          path: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-
-#  DEV:
-#    name: Run ui tests with firebase test lab
+#env:
+#  GITHUB_PR_NUMBER: ${{github.event.pull_request.number}}
+#  GIT_NUM: ${{ github.event.pull_request.head.sha }}
+#  GIT_NO: ${{ github.run_number }}
+#  resourceGroup2: ${{ github.run_id }}-${{ github.run_number }}
+#  act: ${{github.event.pull_request.number}}.${{ github.run_number }}
+#
+#jobs:
+#
+#  prJob:
+#    name: Print event
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#        env:
+#          ACT: $GITHUB_PR_NUMBER.$GIT_NO
+#          EAS: ${{github.event.pull_request.number}}
+#
+#      - name: Setup Gradle
+#        uses: gradle/gradle-build-action@v2
+#
+#      - run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
+#
+#      - run: |
+#          echo "$GITHUB_PR_NUMBER.$GIT_NO" > ssr
+#
+##      - name: Assemble apk
+##        run: ./gradlew assembleRelease Version=$ACT
+#
+#      - name: test2
+#        run: |
+#          echo ${{ env.resourceGroup2 }}
+#          echo "GITACT: $GITHUB_RUN_NUMBER"
+#          echo "GITPR: ${{ env.EAS }}"
+#
+#
+#  test:
+#    name: Unit Tests
 #    runs-on: ubuntu-latest
 #
+#    steps:
+#      - uses: actions/checkout@v1
+#      - name: Set up JDK 11.0
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11.0
 #
-#    permissions:
-#      contents: 'read'
-#      id-token: 'write'
+#      - name: Get Branch
+#        id: branch
+#        run: echo "git_branch=${GITHUB_REF#refs/heads/}"
 #
+#      - name: Check Branch
+#        run: echo "${{ env.branch }}"
+#
+#      - name: appcenter-cli
+#        run: npm install -g appcenter-cli
+#
+#      - name: get version
+#        run: appcenter -v
+#
+#      - name: Get Hash
+#        id: hash
+#        run: echo "git_hash=$(git rev-parse --short "$GITHUB_SHA")"
+#
+#      - name: Check Hash
+#        run: echo "${{ env.hash }}"
+#
+#      - name: Get Pull Request Number
+#        id: pr
+#        run: echo "::set-output name=pull_request_number::$(gh pr view --json number -q .number || echo "")"
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+#
+#      - name: pr number
+#        run: echo '${{steps.get_issue_number.outputs.result}}'
+#      - name: Run Unit Tests
+#        run: bash ./gradlew test --stacktrace
+#
+#
+#  apk:
+#    name: Generate APK
+#    needs: test
+#    runs-on: ubuntu-latest
 #
 #    steps:
-#
-#      - name: create apk
-#        run: |
-#          bash ./gradlew assembleDebug
-#          find $GITHUB_WORKSPACE -name "*.apk"
-#
-#      - uses: 'actions/checkout@v3'
-#
-#
-#      - id: 'auth'
-#        name: 'Authenticate to Google Cloud'
-#        uses: 'google-github-actions/auth@v1'
+#      - uses: actions/checkout@v1
+#      - name: Set up JDK 11.0
+#        uses: actions/setup-java@v1
 #        with:
-#          credentials_json: '${{ secrets.FIREBASE_JSON_KEYFILE }}'
+#          java-version: 11.0
 #
+#      - name: Assemble apk
+#        run: ./gradlew assembleRelease
 #
-#      - name: 'Set up Cloud SDK'
-#        uses: 'google-github-actions/setup-gcloud@v1'
+##      - name: release to firebase
+##        uses: wzieba/Firebase-Distribution-Github-Action@v1
+##        with:
+##          appId: ${{secrets.FIREBASE_APP_ID}}
+##          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+##          file: app/build/outputs/apk/release/app-release-unsigned.apk
 #
+##      - name: Assemble debug APP APK
+##        run: bash ./gradlew assembleDebug --stacktrace
+##        env:
+##          ZTM_API_KEY: ${{ secrets.ZTM_API_KEY }}
+##
+##      - name: Upload APK
+##        uses: actions/upload-artifact@v1
+##        with:
+##          name: app-debug
+##          path: app/build/outputs/apk/debug/app-debug.apk
 #
+##      - name: Android UI Tests
+##        run: bash ./gradlew assembleDebugAndroidTest
+##        env:
+##          ZTM_API_KEY: ${{ secrets.ZTM_API_KEY }}
+##
+##      - name: Upload Android Test APK
+##        uses: actions/upload-artifact@v1
+##        with:
+##          name: app-debug-androidTest
+##          path: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 #
-#
-#      - name: Run Instrumentation Tests in Firebase Test Lab
-#        run: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/app-debug/app-debug.apk --test app/build/outputs/apk/app-debug-androidTest/app-debug-androidTest.apk --device model=Pixel2,version=26,locale=pl,orientation=portrait
-#
-#      - name: Run firebase tests
-#        run: |
-#          gcloud firebase test android run --type instrumentation "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" "app/src/androidTest"
+##  DEV:
+##    name: Run ui tests with firebase test lab
+##    runs-on: ubuntu-latest
+##
+##
+##    permissions:
+##      contents: 'read'
+##      id-token: 'write'
+##
+##
+##    steps:
+##
+##      - name: create apk
+##        run: |
+##          bash ./gradlew assembleDebug
+##          find $GITHUB_WORKSPACE -name "*.apk"
+##
+##      - uses: 'actions/checkout@v3'
+##
+##
+##      - id: 'auth'
+##        name: 'Authenticate to Google Cloud'
+##        uses: 'google-github-actions/auth@v1'
+##        with:
+##          credentials_json: '${{ secrets.FIREBASE_JSON_KEYFILE }}'
+##
+##
+##      - name: 'Set up Cloud SDK'
+##        uses: 'google-github-actions/setup-gcloud@v1'
+##
+##
+##
+##
+##      - name: Run Instrumentation Tests in Firebase Test Lab
+##        run: gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/app-debug/app-debug.apk --test app/build/outputs/apk/app-debug-androidTest/app-debug-androidTest.apk --device model=Pixel2,version=26,locale=pl,orientation=portrait
+##
+##      - name: Run firebase tests
+##        run: |
+##          gcloud firebase test android run --type instrumentation "app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk" "app/src/androidTest"

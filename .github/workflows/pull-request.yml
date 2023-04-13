@@ -27,7 +27,7 @@ jobs:
         with:
           path: ./app/version.txt
       - name: Echo package.json
-        run: echo "GIT_RUN=${{ steps.package.outputs.content }}$MAXS${{github_run_id}}" >> $GITHUB_ENV
+        run: echo "GIT_RUN=${{ steps.package.outputs.content }}$MAXS${{github.run_number}}" >> $GITHUB_ENV
 
       - run: echo $GIT_RUN
         

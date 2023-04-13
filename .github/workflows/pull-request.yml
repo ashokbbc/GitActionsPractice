@@ -32,7 +32,7 @@ jobs:
         with:
           path: ./app/version.txt
       - name: Make version no
-        run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"${{RESULT}}" >> $GITHUB_ENV
+        run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"${{env.INCREMENT}}" >> $GITHUB_ENV
 
       - run: echo $GIT_RUN
 

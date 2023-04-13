@@ -4,7 +4,7 @@ on:
   push:
 
 env:
-  INCREMENTSA: 1400
+  INCREMENT: 1400
   MAXS: "-dev-"
 
 jobs:

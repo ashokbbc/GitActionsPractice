@@ -21,13 +21,13 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
 
-      - name: Read package.json
+      - name: Read version.txt file
         id: package
         uses: juliangruber/read-file-action@v1
         with:
           path: ./app/version.txt
       - name: Echo package.json
-        run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"{{github.run_number}}" >> $GITHUB_ENV
+        run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"${{github.run_number}}" >> $GITHUB_ENV
 
       - run: echo $GIT_RUN
 

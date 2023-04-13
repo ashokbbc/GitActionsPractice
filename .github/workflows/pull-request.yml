@@ -28,7 +28,8 @@ jobs:
 #        with:
 #          name: homework
 #          path: math-homework.txt
-      - shell: bash
+
+      - name: Download math result for job 2
         uses: actions/download-artifact@v3
         with:
           name: homework

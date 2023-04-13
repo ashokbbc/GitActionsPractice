@@ -4,7 +4,7 @@ on:
   push:
 
 env:
-  INCREMENTSA: 1a
+  INCREMENTSA: 1400
   MAXS: "-dev-"
 
 jobs:
@@ -20,13 +20,18 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Test
+        run: |
+          (( RESULT = ${{github.run_number}} + $INCREMENT ))
+          echo $RESULT
+          
 
       - name: Read version.txt file
         id: package
         uses: juliangruber/read-file-action@v1
         with:
           path: ./app/version.txt
-      - name: Echo package.json
+      - name: Make version no
         run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"${{github.run_number}}" >> $GITHUB_ENV
 
       - run: echo $GIT_RUN
@@ -78,11 +83,7 @@ jobs:
 #          test -n "${{ steps.previoustag.outputs.tag }}"
 #          test -n "${{ steps.previoustag.outputs.timestamp }}"
 #
-#      - name: Test
-#        run: |
-#          (( RESULT = $GIT_TAG_NO + $INCREMENT ))
-#          echo $RESULT
-#          echo $GIT_TAG_NO
+
 #
 #      - name: Get the version
 #        id: get_version

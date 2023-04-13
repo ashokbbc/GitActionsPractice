@@ -30,6 +30,11 @@ jobs:
         run: echo "GIT_RUN=${{ steps.package.outputs.content }}$MAXS${{github.run_number}}" >> $GITHUB_ENV
 
       - run: echo $GIT_RUN
+
+      - name: merge
+        run: echo "Git_fix=`echo ($GIT_RUN$MAXS${{github.run_number}})`" >> $GITHUB_ENV
+
+      - run: echo $Git_fix
         
 #      - name: "Get latest tag"
 #        id: latest_tag
@@ -41,7 +46,7 @@ jobs:
 
 
           
-      - run: echo $GIT_MERGE
+#      - run: echo $GIT_MERGE
 
 #       - name: release
 #         uses: actions/create-release@v1

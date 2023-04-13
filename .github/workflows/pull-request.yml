@@ -21,13 +21,13 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - shell: bash
-        run: |
-          expr 3 + 7 > math-homework.txt
-      - name: Upload math result for job 1
-        uses: actions/upload-artifact@v3
-        with:
-          name: homework
-          path: math-homework.txt
+#        run: |
+#          expr 3 + 7 > math-homework.txt
+#      - name: Upload math result for job 1
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: homework
+#          path: math-homework.txt
 
       - run: |
           value=`cat math-homework.txt`

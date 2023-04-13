@@ -23,7 +23,7 @@ jobs:
       - name: Test
         run: |
           (( RESULT = ${{github.run_number}} + $INCREMENT ))
-          echo $RESULT
+          echo "BUILd_no=$RESULT" >> $GITHUB_ENV
           
 
       - name: Read version.txt file

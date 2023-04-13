@@ -20,7 +20,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - shell: bash
+
 #        run: |
 #          expr 3 + 7 > math-homework.txt
 #      - name: Upload math result for job 1
@@ -28,8 +28,8 @@ jobs:
 #        with:
 #          name: homework
 #          path: math-homework.txt
-
-      - run: |
+      - shell: bash
+        run: |
           value=`cat math-homework.txt`
           expr $value \* 9 > math-homework.txt
       - name: Upload math result for job 2

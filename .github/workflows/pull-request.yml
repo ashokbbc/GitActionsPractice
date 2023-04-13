@@ -22,8 +22,7 @@ jobs:
 
       - name: Test
         run: |
-          (( RESULT = ${{github.run_number}} + 1400 ))
-          echo "BUILd_no=$RESULT" >> $GITHUB_ENV
+          echo "BUILd_no=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
           
       - run: echo $BUILd_no
       - name: Read version.txt file
@@ -32,7 +31,7 @@ jobs:
         with:
           path: ./app/version.txt
       - name: Make version no
-        run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"${{env.INCREMENT}}" >> $GITHUB_ENV
+        run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"${{env.BUILd_no}}" >> $GITHUB_ENV
 
       - run: echo $GIT_RUN
 

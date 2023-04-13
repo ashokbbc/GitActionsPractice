@@ -4,7 +4,7 @@ on:
   push:
 
 env:
-  INCREMENT: 1400
+  INCREMENT: 1400+${{github.run_number}}
   MAXS: "-dev-"
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
         with:
           path: ./app/version.txt
       - name: Make version no
-        run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"${{github.run_number}}" >> $GITHUB_ENV
+        run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"${{RESULT}}" >> $GITHUB_ENV
 
       - run: echo $GIT_RUN
 

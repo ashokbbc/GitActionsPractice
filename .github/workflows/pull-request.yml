@@ -26,12 +26,12 @@ jobs:
           
       - run: echo $BUILd_no
 
-      - run: |
-          echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
-          cat ./app/version.txt >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-      - run: |
-          echo '${{ (env.PACKAGE_JSON).version }}'
+#      - run: |
+#          echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
+#          cat ./app/version.txt >> $GITHUB_ENV
+#          echo 'EOF' >> $GITHUB_ENV
+#      - run: |
+#          echo '${{ (env.PACKAGE_JSON).version }}'
 
       - name: Read with Cat
         id: subj

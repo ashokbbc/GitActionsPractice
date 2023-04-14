@@ -23,7 +23,7 @@ jobs:
       - name: Test
         run: |
           echo "BUILd_no=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
-          echo "MASER=`sh app/version.txt`" >>$GITHUB_ENV
+          echo "MASER=`cat app/version.txt`" >>$GITHUB_ENV
           
       - run: echo $MASER
 

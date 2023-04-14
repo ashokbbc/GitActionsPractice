@@ -23,6 +23,7 @@ jobs:
       - name: Test
         run: |
           echo "BUILd_no=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
+          sh $GITHUB_WORKSPACE/app/nums.sh
           
       - run: echo $BUILd_no
 

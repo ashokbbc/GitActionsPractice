@@ -33,7 +33,8 @@ jobs:
       - name: Make version no
         run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"${{env.BUILd_no}}" >> $GITHUB_ENV
 
-      - run: echo `$GIT_RUN :rocket:`
+      - run: echo "$GIT_RUN :rocket:"
+      - run: echo $GIT_RUN ":rocket:"
 
 #      - name: merge
 #        run: echo "Git_fix=`echo ${{GIT_RUN}}${{MAXS}}${{github.run_number}}`" >> $GITHUB_ENV

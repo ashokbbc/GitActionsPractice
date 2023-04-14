@@ -27,8 +27,8 @@ jobs:
       - run: echo $BUILd_no
 
       - name: Read with Cat
-        run: value="$(cat ./app/version.txt)"
-      - run: echo $value
+        run: echo "::set-output name=version::$(cat ./app/version.txt)"
+      - run: echo $version
       - name: Read version.txt file
         id: package
         uses: juliangruber/read-file-action@v1

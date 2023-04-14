@@ -25,6 +25,10 @@ jobs:
           echo "BUILd_no=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
           
       - run: echo $BUILd_no
+
+      - name: Read with Cat
+        run: sh `value="$(cat config.txt)"`
+      - run: echo $value
       - name: Read version.txt file
         id: package
         uses: juliangruber/read-file-action@v1

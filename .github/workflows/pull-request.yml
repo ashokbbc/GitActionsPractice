@@ -27,7 +27,7 @@ jobs:
       - run: echo $BUILd_no
 
       - name: Read with Cat
-        run: sh `value="$(cat ./app/version.txt)"`
+        run: value="$(cat ./app/version.txt)"
       - run: echo $value
       - name: Read version.txt file
         id: package

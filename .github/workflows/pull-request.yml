@@ -26,9 +26,18 @@ jobs:
           
       - run: echo $BUILd_no
 
+      - run: |
+          echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
+          cat ./app/version.txt >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - run: |
+          echo '${{ (env.PACKAGE_JSON).version }}'
+
       - name: Read with Cat
-        run: echo "::set-output name=version::$(cat ./app/version.txt)"
-      - run: echo $version
+        id: subj
+        run: content=`cat ./app/version.txt`
+
+      - run: echo $content
       - name: Read version.txt file
         id: package
         uses: juliangruber/read-file-action@v1

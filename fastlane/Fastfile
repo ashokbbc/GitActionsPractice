@@ -22,13 +22,59 @@ platform :android do
   end
 
   desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
+  lane :betaTest do
+    gradle(task: "clean -Dskip.tests -PversionName=#{getVersionNumber} -PversionCode=#{getVersionCode} assembleRelease")
     crashlytics
   
     # sh "your_script.sh"
     # You can also use other beta testing services here
   end
+
+    def getVersionNumber
+        if isPullRequest?
+            return "PR-#{getPRNumber}"
+        elsif isOnGitHubActions?
+            return "#{ENV["PRE_RELEASE_NO"]}"
+         else nil
+        end
+    end
+
+    def getVersionCode
+        if isPullRequest?
+            return "5000"
+        elsif isOnGitHubActions?
+            return "#{ENV["BUILD_NUMBER"]}"
+        else nil
+        end
+    end
+
+    def isOnGitHubActions?
+        return isOnCi? && ENV["JOB_NAME"] == "Github-Actions"
+    end
+
+    def isRelease?
+        return isOnCi? && ENV["JOB_NAME"] == "Release-ATK"
+    end
+
+    def isOnCi?
+        ciJobType = ENV["JOB_NAME"]
+        return !ciJobType.to_s.empty?
+    end
+    def isPullRequest?
+        if isOnGitHubActions?
+            return !getPRNumber.to_s.empty?
+        else
+            return getBranchNameWithoutOrigin.start_with?('PR-')
+        end
+    end
+
+    def getPRNumber
+        if isOnGitHubActions?
+            return ENV["PR_NUMBER"]
+        else
+            return getBranchNameWithoutOrigin.gsub("PR-", "")
+        end
+    end
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do

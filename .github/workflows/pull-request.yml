@@ -8,10 +8,10 @@ concurrency:
   cancel-in-progress: true
 
 
-
 env:
   INCREMENT: ((1400+${{github.run_number}}))
   MAXS: "-dev-"
+  JOB_NAME: "Github-Actions"
 
 jobs:
   Verify-Pull-Request:
@@ -30,6 +30,9 @@ jobs:
           echo "MASER=`cat app/version.txt`" >>$GITHUB_ENV
           
       - run: echo $MASER
+      - run: bundle install
+      - name: Unit tests
+        run: bundle exec fastlane betaTest
 
 #      - run: |
 #          echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
@@ -38,21 +41,23 @@ jobs:
 #      - run: |
 #          echo '${{ (env.PACKAGE_JSON).version }}'
 
-      - name: Read with Cat
-        id: subj
-        run: content=`cat ./app/version.txt`
 
-      - run: echo $content
-      - name: Read version.txt file
-        id: package
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./app/version.txt
-      - name: Make version no
-        run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"${{env.BUILd_no}}" >> $GITHUB_ENV
 
-      - run: echo "$GIT_RUN :rocket:"
-      - run: echo $GIT_RUN ":rocket:"
+#      - name: Read with Cat
+#        id: subj
+#        run: content=`cat ./app/version.txt`
+#
+#      - run: echo $content
+#      - name: Read version.txt file
+#        id: package
+#        uses: juliangruber/read-file-action@v1
+#        with:
+#          path: ./app/version.txt
+#      - name: Make version no
+#        run: echo "GIT_RUN=${{ steps.package.outputs.content }}"-dev-"${{env.BUILd_no}}" >> $GITHUB_ENV
+#
+#      - run: echo "$GIT_RUN :rocket:"
+#      - run: echo $GIT_RUN ":rocket:"
 
 #      - name: merge
 #        run: echo "Git_fix=`echo ${{GIT_RUN}}${{MAXS}}${{github.run_number}}`" >> $GITHUB_ENV

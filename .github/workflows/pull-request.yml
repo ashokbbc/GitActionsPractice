@@ -26,10 +26,12 @@ jobs:
 
       - name: Test
         run: |
-          echo "BUILd_no=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
+          echo "BUILD_NUMBERS=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
           echo "MASER=`cat app/version.txt`" >>$GITHUB_ENV
+          echo "PRE_RELEASE_NO=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV
           
       - run: echo $MASER
+      - run: echo $PRE_RELEASE_NO
       - run: bundle install
       - name: Unit tests
         run: bundle exec fastlane betaTest

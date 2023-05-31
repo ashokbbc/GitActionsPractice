@@ -40,8 +40,8 @@ jobs:
       - run: echo "PRE_RELEASE_NOS=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV
           
       - run: echo $MASER
-      - run: echo $PRE_RELEASE_NO
-      - run: echo $PRE_RELEASE_NOS
+      - run: echo $MASERAS
+      - run: echo $MASERTY
 #      - run: bundle install
 #      - name: Unit tests
 #        run: bundle exec fastlane betaTest

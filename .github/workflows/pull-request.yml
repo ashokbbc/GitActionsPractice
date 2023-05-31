@@ -35,7 +35,7 @@ jobs:
 
       - run: echo "MASERAS=`cat assets/release.txt`" >>$GITHUB_ENV
 
-      - run: echo "MASERTY=`cat CI/release.txt`" >>$GITHUB_ENV
+      - run: echo "MASERTY=`cat $GITHUB_WORKSPACE/CI/release.txt`" >>$GITHUB_ENV
 
       - run: echo "PRE_RELEASE_NOS=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV
           

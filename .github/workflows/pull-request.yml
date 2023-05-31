@@ -29,9 +29,13 @@ jobs:
       - name: Test
         run: |
           echo "BUILD_NUMBERS=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
-          echo "MASER=`cat ./assets/release.txt`" >>$GITHUB_ENV
+          echo "MASER=`cat .github/assets/release.txt`" >>$GITHUB_ENV
           echo $MASER
           echo "PRE_RELEASE_NO=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV
+
+      - run: echo "MASERAS=`cat assets/release.txt`" >>$GITHUB_ENV
+
+      - run: echo "MASERTY=`cat CI/release.txt`" >>$GITHUB_ENV
 
       - run: echo "PRE_RELEASE_NOS=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV
           

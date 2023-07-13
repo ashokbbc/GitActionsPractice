@@ -29,7 +29,7 @@ jobs:
       - name: Test
         run: |
           echo "BUILD_NUMBERS=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
-          echo "MASER=`cat .github/assets/release.txt`" >>$GITHUB_ENV
+          echo "MASER=`git rev-list --count HEAD`" >>$GITHUB_ENV
           echo $MASER
           echo "PRE_RELEASE_NO=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV
 

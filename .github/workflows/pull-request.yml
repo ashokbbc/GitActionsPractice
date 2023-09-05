@@ -26,7 +26,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - run: curl X GET https://techvedham.com/wp-content/uploads/2023/09/verson.json
+      - run: curl X GET https://techvedham.com/wp-content/uploads/2023/09/verson.json | jq -r '.version'
 
       - name: Test
         run: |

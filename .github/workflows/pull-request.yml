@@ -26,14 +26,14 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - run: curl X GET https://techvedham.com/wp-content/uploads/2023/09/verson.json | jq -r '.version'
+      - run: echo "VIO=`curl X GET https://techvedham.com/wp-content/uploads/2023/09/verson.json | jq -r '.version'`" >> $GITHUB_ENV
 
       - name: Test
         run: |
+          echo $VIO
           echo "BUILD_NUMBERS=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
           echo "VERSN=`curl X GET https://techvedham.com/wp-content/uploads/2023/09/verson.json | jq -r '.version'`" >> $GITHUB_ENV
           echo "MASER=`git rev-list --count HEAD`" >>$GITHUB_ENV
-          echo $VERSN
           echo "PRE_RELEASE_NO=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV
 
       - run: echo "MASERAS=`cat assets/release.txt`" >>$GITHUB_ENV

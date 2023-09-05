@@ -28,6 +28,7 @@ jobs:
 
       - name: Test
         run: |
+          curl X GET https://jsonplaceholder.typicode.com/todos/1
           echo "BUILD_NUMBERS=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
           echo "VERSN=`curl X GET https://jsonplaceholder.typicode.com/todos/1`" >> $GITHUB_ENV
           echo "MASER=`git rev-list --count HEAD`" >>$GITHUB_ENV

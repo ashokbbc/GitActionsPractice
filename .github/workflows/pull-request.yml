@@ -30,9 +30,8 @@ jobs:
 
       - name: Test
         run: |
-          curl X GET https://techvedham.com/wp-content/uploads/2023/09/verson.json
           echo "BUILD_NUMBERS=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
-          echo "VERSN=`curl X GET https://techvedham.com/wp-content/uploads/2023/09/verson.json`" >> $GITHUB_ENV
+          echo "VERSN=`curl X GET https://techvedham.com/wp-content/uploads/2023/09/verson.json | jq -r '.version'`" >> $GITHUB_ENV
           echo "MASER=`git rev-list --count HEAD`" >>$GITHUB_ENV
           echo $VERSN
           echo "PRE_RELEASE_NO=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV

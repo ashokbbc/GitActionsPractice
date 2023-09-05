@@ -28,9 +28,9 @@ jobs:
 
       - name: Test
         run: |
-          curl X GET https://jsonplaceholder.typicode.com/todos/1
+          curl X GET https://jsonkeeper.com/b/YMLV
           echo "BUILD_NUMBERS=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
-          echo "VERSN=`curl X GET https://jsonplaceholder.typicode.com/todos/1`" >> $GITHUB_ENV
+          echo "VERSN=`curl X GET https://jsonkeeper.com/b/YMLV`" >> $GITHUB_ENV
           echo "MASER=`git rev-list --count HEAD`" >>$GITHUB_ENV
           echo $VERSN
           echo "PRE_RELEASE_NO=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV

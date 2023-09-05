@@ -29,8 +29,9 @@ jobs:
       - name: Test
         run: |
           echo "BUILD_NUMBERS=$((${{github.run_number}} + 200))" >> $GITHUB_ENV
+          echo "VERSN=`curl X GET https://jsonplaceholder.typicode.com/todos/1`" >> $GITHUB_ENV
           echo "MASER=`git rev-list --count HEAD`" >>$GITHUB_ENV
-          echo $MASER
+          echo $VERSN
           echo "PRE_RELEASE_NO=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV
 
       - run: echo "MASERAS=`cat assets/release.txt`" >>$GITHUB_ENV
@@ -40,7 +41,7 @@ jobs:
 
       - run: echo "PRE_RELEASE_NOS=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV
           
-      - run: echo $MASER
+      - run: echo $VERSN
       - run: echo $MASERAS
       - run: echo $MASERTY
 #      - run: bundle install

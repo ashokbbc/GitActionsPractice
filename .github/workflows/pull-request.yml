@@ -26,6 +26,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - run: sh "git rev-list origin/main --count"
+
       - name: run
         run: |
           echo "MAP=${{github.runerrt_id}}" >> $GITHUB_ENV

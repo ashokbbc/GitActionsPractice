@@ -55,11 +55,6 @@ jobs:
           THIS_JOB_STATUS="${{ job.status }}"
           if [ "$LAST_JOB_STATUS" != "$THIS_JOB_STATUS" ]; then
             echo "STUP="Super"" >> $GITHUB_ENV
-            echo "status changed from $LAST_JOB_STATUS to $THIS_JOB_STATUS"
-            echo "::set-output name=changedState::true"
-          else
-            echo "status is still $THIS_JOB_STATUS"
-            echo "::set-output name=changedState::false"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}

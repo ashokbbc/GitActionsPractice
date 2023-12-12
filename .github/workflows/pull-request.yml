@@ -51,7 +51,7 @@ jobs:
         id: lastJobStatus
         if: always()
         run: |
-          LAST_JOB_STATUS=$(gh run list --workflow workflow_history.yaml | grep -oh "completed.*" | head -1 | awk '{print $2}')
+          LAST_JOB_STATUS=$(gh run list --workflow pull-request.yml | grep -oh "completed.*" | head -1 | awk '{print $2}')
           THIS_JOB_STATUS="${{ job.status }}"
           if [ "$LAST_JOB_STATUS" != "$THIS_JOB_STATUS" ]; then
             echo "status changed from $LAST_JOB_STATUS to $THIS_JOB_STATUS"

@@ -54,9 +54,10 @@ jobs:
         run: |
           LAST_JOB_STATUS=$(gh run list --workflow pull-request.yml | grep -oh "completed.*" | head -1 | awk '{print $2}')
           THIS_JOB_STATUS="${{ job.status }}"
-          if [ "$LAST_JOB_STATUS" != "$THIS_JOB_STATUS" ]; then
+          if [ "$LAST_JOB_STATUS" == "$THIS_JOB_STATUS" ]; then
             echo "STUP="Super"" >> $GITHUB_ENV
           fi
+          echo $STP
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
 

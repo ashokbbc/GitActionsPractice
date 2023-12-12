@@ -48,8 +48,7 @@ jobs:
 
       - run: echo "MASERTY=`cat $GITHUB_WORKSPACE/CI/release.txt`" >>$GITHUB_ENV
       - name: Check last job status
-        id: lastJobStatus
-        if: always()
+        if: success()
         run: |
           LAST_JOB_STATUS=$(gh run list --workflow pull-request.yml | grep -oh "completed.*" | head -1 | awk '{print $2}')
           THIS_JOB_STATUS="${{ job.status }}"

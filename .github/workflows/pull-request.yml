@@ -46,33 +46,33 @@ jobs:
 
       - run: echo "MASERAS=`cat assets/release.txt`" >>$GITHUB_ENV
 
-      - run: echo "MASERTY=`cat $GITHUB_WORKSPACE/CI/release.txt`" >>$GITHUB_ENV
-      - name: Check last job status
-        id: lastJobStatus
-        if: always()
-        run: |
-          LAST_JOB_STATUS=$(gh run list --workflow pull-request.yml | grep -oh "completed.*" | head -1 | awk '{print $2}')
-          THIS_JOB_STATUS="${{ job.status }}"
-          if [ "$LAST_JOB_STATUS" != "$THIS_JOB_STATUS" ]; then
-            echo "STUP="Super"" >> $GITHUB_ENV
-            echo "status changed from $LAST_JOB_STATUS to $THIS_JOB_STATUS"
-            echo "::set-output name=changedState::true"
-          else
-            echo "status is still $THIS_JOB_STATUS"
-            echo "::set-output name=changedState::false"
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+      # - run: echo "MASERTY=`cat $GITHUB_WORKSPACE/CI/release.txt`" >>$GITHUB_ENV
+      # - name: Check last job status
+      #   id: lastJobStatus
+      #   if: always()
+      #   run: |
+      #     LAST_JOB_STATUS=$(gh run list --workflow pull-request.yml | grep -oh "completed.*" | head -1 | awk '{print $2}')
+      #     THIS_JOB_STATUS="${{ job.status }}"
+      #     if [ "$LAST_JOB_STATUS" != "$THIS_JOB_STATUS" ]; then
+      #       echo "STUP="Super"" >> $GITHUB_ENV
+      #       echo "status changed from $LAST_JOB_STATUS to $THIS_JOB_STATUS"
+      #       echo "::set-output name=changedState::true"
+      #     else
+      #       echo "status is still $THIS_JOB_STATUS"
+      #       echo "::set-output name=changedState::false"
+      #     fi
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
 
           
       - run: echo $STUP
         
-      # - run: sh "git rev-list origin/main --count"
+      - run: sh "git rev-list origin/main --count"
 
-      # - run: echo "PRE_RELEASE_NOS=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV
+      - run: echo "PRE_RELEASE_NOS=${{ env.MASER }}"-dev."${{env.BUILD_NUMBERS}}" >> $GITHUB_ENV
           
-      # - run: echo $VERSN
-      # - run: echo $MASERAS
+      - run: echo $VERSN
+      - run: echo $MASERAS
       # - run: echo $MASERTY
 #      - run: bundle install
 #      - name: Unit tests

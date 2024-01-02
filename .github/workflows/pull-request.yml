@@ -14,6 +14,8 @@ env:
   INCREMENT: ((1400+${{github.run_number}}))
   MAXS: "-dev-"
   JOB_NAME: "Github-Actions"
+  NOPE: ((${{github.run_number}} - 1))
+  API_URL: "https://api.github.com/repos/ashokbbc/GitActionsPractice/actions/runs/${{env.NOPE}}
 
 jobs:
   Verify-Pull-Request:
@@ -39,8 +41,7 @@ jobs:
       - name: Get Job Status
         id: get-job-status
         run: |
-          API_URL="https://api.github.com/repos/ashokbbc/GitActionsPractice/actions/runs/${{env.NOP}}"
-          JOB_STATU=$(curl -s -H "Authorization: Bearer ${{ secrets.GIT_TOKEN }}" $API_URL | jq -r '.workflow_run.jobs.YourJobName.conclusion')
+          JOB_STATU=$(curl -s -H "Authorization: Bearer ${{ secrets.GIT_TOKEN }}" ${{env.API_URL}} | jq -r '.workflow_run.jobs.YourJobName.conclusion')
 
           # Output the job status
           echo "Job Status: $JOB_STATU"

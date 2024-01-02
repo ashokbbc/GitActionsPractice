@@ -33,7 +33,7 @@ jobs:
         id: get-job-status
         run: |
           API_URL="https://api.github.com/repos/ashokbbc/GitActionsPractice/actions/runs/${{env.NOP}}"
-          JOB_STATU=$(curl -s -H "Authorization: Bearer ${{ secrets.GIT_TOKEN }}" https://api.github.com/repos/ashokbbc/GitActionsPractice/actions/runs/${{env.NOP}} | jq -r '.workflow_run.jobs.YourJobName.conclusion')
+          JOB_STATU=$(curl -s -H "Authorization: Bearer ${{ secrets.GIT_TOKEN }}" https://api.github.com/repos/ashokbbc/GitActionsPractice/actions/runs/${{env.NOP}} | jq -r '.workflow_run.jobs.Github-Actions.conclusion')
 
           # Output the job status
           echo "Job Status: $JOB_STATU"

@@ -33,8 +33,17 @@ jobs:
           echo "MAP=${{github.runerrt_id}}" >> $GITHUB_ENV
           echo $MAP
 
-      - run: echo "NOP=${{github.run_id}}" >> $GITHUB_ENV
+      - run: echo "NOP=$((${{github.run_number}} - 1))" >> $GITHUB_ENV
       - run: echo $NOP
+
+      - name: Get Job Status
+        id: get-job-status
+        run: |
+          API_URL="https://api.github.com/repos/ashokbbc/GitActionsPractice/actions/runs/${NOP}"
+          JOB_STATU=$(curl -s -H "Authorization: Bearer ${{ secrets.GIT_TOKEN }}" $API_URL | jq -r '.workflow_run.jobs.YourJobName.conclusion')
+
+          # Output the job status
+          echo "Job Status: $JOB_STATU"
       - run: echo "MASERP=`git rev-list --count HEAD`" >>$GITHUB_ENV
       - run: echo "PRE_MSG=${{github.run_id}} "-dev."${{env.MASERPASD}}"most-"" >> $GITHUB_ENV
       - run: echo $PRE_MSGERT

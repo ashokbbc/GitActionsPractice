@@ -14,7 +14,6 @@ env:
   INCREMENT: ((1400+${{github.run_number}}))
   MAXS: "-dev-"
   JOB_NAME: "Github-Actions"
-  NOPE: ((${{github.run_number}} - 1))
 
 jobs:
   Verify-Pull-Request:
@@ -27,10 +26,13 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - run: echo "NOP=$((${{github.run_number}} - 1))" >> $GITHUB_ENV
+      - run: echo $NOP
+
       - name: Get Job Status
         id: get-job-status
         run: |
-          API_URL="https://api.github.com/repos/ashokbbc/GitActionsPractice/actions/runs/${{env.NOPE}}"
+          API_URL="https://api.github.com/repos/ashokbbc/GitActionsPractice/actions/runs/${{env.NOP}}"
           JOB_STATU=$(curl -s -H "Authorization: Bearer ${{ secrets.GIT_TOKEN }}" ${{env.API_URL}} | jq -r '.workflow_run.jobs.YourJobName.conclusion')
 
           # Output the job status
